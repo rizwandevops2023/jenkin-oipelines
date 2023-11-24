@@ -1,28 +1,29 @@
 pipeline {
     agent any
     environment {
-    PATH = "/opt/apache-maven-3.6.3/bin:${PATH}"
-     }
+        PATH = "/opt/apache-maven-3.9.5/bin:${PATH}"
+        }
     stages {
-        stage('Checkout') {
+        stage('Clone Code') {
             steps {
-                // Checkout the source code from your version control system
-                // For example, using Git:
-                git 'https://github.com/architectdevops7/jenkins-pipelines.git'
+                git 'https://github.com/rizwandevops2023/jenkin-oipelines.git'
             }
         }
-        
-        stage('Build') {
+        stage('Build Package') {
             steps {
-                // Build the project using Maven
                 sh 'mvn clean package'
             }
         }
-        
-        stage('Deploy') {
+        stage('Test') {
             steps {
-                deploy adapters: [tomcat9(credentialsId: 'tomcat-user', path: '', url: 'http://18.234.147.0:8080/')], contextPath: null, war: '**/*.war'
+               sh 'mvn test'
             }
         }
+        stage('Deploy') {
+            steps {
+                deploy adapters: [tomcat9(credentialsId: 'tomcat-user', path: '', url: 'http://54.146.159.156:8080/')], contextPath: null, war: '**/*.war'
+            }
+        }
+        
     }
 }
